@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: sergey_lelekin
+      changes:
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isbn
+                  type: VARCHAR(17)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: published_date
+                  type: DATE
+              - column:
+                  name: available
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
