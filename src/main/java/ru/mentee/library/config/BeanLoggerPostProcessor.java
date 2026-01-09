@@ -9,17 +9,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class BeanLoggerPostProcessor implements BeanPostProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(BeanLoggerPostProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(BeanLoggerPostProcessor.class);
 
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("Bean '{}' типа'{}' готов к инициализации", beanName, bean.getClass().getName());
-        return bean;
-    }
+  @Override
+  public Object postProcessBeforeInitialization(Object bean, String beanName)
+      throws BeansException {
+    logger.info("Bean '{}' типа'{}' готов к инициализации", beanName, bean.getClass().getName());
+    return bean;
+  }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("Bean '{}' типа '{}' инициализирован", beanName, bean.getClass().getName());
-        return bean;
-    }
+  @Override
+  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    logger.info("Bean '{}' типа '{}' инициализирован", beanName, bean.getClass().getName());
+    return bean;
+  }
 }

@@ -10,8 +10,8 @@ import ru.mentee.library.service.CartService;
 @Transactional
 public class CartServiceImpl implements CartService {
 
-    @Override
-    public void addBookToCart(Long bookId, Long customerId) {
-        //todo
-    }
+  @Override
+  public void addBookToCart(Long bookId, Long customerId) {
+    // todo
+  }
 }

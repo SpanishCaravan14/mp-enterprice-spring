@@ -1,9 +1,8 @@
 package ru.mentee.library.domain.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,15 +13,16 @@ import java.time.LocalDate;
 @Builder
 public class Book {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String title;
-    private String author;
-    private String isbn;
+  private String title;
+  private String author;
+  private String isbn;
 
-    @Column(name = "published_date")
-    private LocalDate publishedDate;
-    private Boolean available;
+  @Column(name = "published_date")
+  private LocalDate publishedDate;
+
+  private Boolean available;
 }

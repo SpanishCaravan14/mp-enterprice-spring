@@ -2,11 +2,11 @@ package ru.mentee.library.domain.exception;
 
 public class InvalidIsbnException extends RuntimeException {
 
-    public InvalidIsbnException() {
-        this("Некорректный ISBN");
-    }
+  public InvalidIsbnException() {
+    this("Некорректный ISBN");
+  }
 
-    private InvalidIsbnException(String message) {
-        super(message);
-    }
+  private InvalidIsbnException(String message) {
+    super(message);
+  }
 }

@@ -10,25 +10,26 @@ import ru.mentee.library.domain.model.Book;
 @UtilityClass
 public class BookMapper {
 
-    public static Book toBookCreateModel(CreateBookRequest createBookRequest) {
-        log.info("Mapping toBookCreateModel from: " + createBookRequest);
-        return Book.builder().title(createBookRequest.getTitle())
-                .author(createBookRequest.getAuthor())
-                .isbn(createBookRequest.getIsbn())
-                .publishedDate(createBookRequest.getPublishedDate())
-                .available(true)
-                .build();
-    }
+  public static Book toBookCreateModel(CreateBookRequest createBookRequest) {
+    log.info("Mapping toBookCreateModel from: " + createBookRequest);
+    return Book.builder()
+        .title(createBookRequest.getTitle())
+        .author(createBookRequest.getAuthor())
+        .isbn(createBookRequest.getIsbn())
+        .publishedDate(createBookRequest.getPublishedDate())
+        .available(true)
+        .build();
+  }
 
-    public static BookDto toBookReadModel(Book book) {
-        log.info("Mapping toBookReadModel from book with isbn: " + book.getIsbn());
-        return BookDto.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .author(book.getAuthor())
-                .isbn(book.getIsbn())
-                .publishedDate(book.getPublishedDate())
-                .available(book.getAvailable())
-                .build();
-    }
+  public static BookDto toBookReadModel(Book book) {
+    log.info("Mapping toBookReadModel from book with isbn: " + book.getIsbn());
+    return BookDto.builder()
+        .id(book.getId())
+        .title(book.getTitle())
+        .author(book.getAuthor())
+        .isbn(book.getIsbn())
+        .publishedDate(book.getPublishedDate())
+        .available(book.getAvailable())
+        .build();
+  }
 }
