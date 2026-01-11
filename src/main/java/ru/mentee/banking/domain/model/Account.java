@@ -18,11 +18,16 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User ownerUser;
     @NotNull
     @DecimalMin("0.00")
     @Column(name = "balance", nullable = false, precision = 19, scale = 2)
-    private BigDecimal amount;
+    private BigDecimal balance;
     @Column(name = "currency", nullable = false, length = 3)
     private String currency = "RUB";
+
+    @NotNull
+    private Boolean active = true;
 }
