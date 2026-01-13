@@ -15,23 +15,24 @@ import ru.mentee.banking.service.internal.UserDetailsServiceImpl;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .userDetailsService(userDetailsServiceImpl)
-                .authorizeHttpRequests(authz -> authz
-                        .anyRequest().authenticated()
-                )
-                .httpBasic();
+  private final UserDetailsServiceImpl userDetailsServiceImpl;
 
-        return http.build();
-    }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.csrf()
+        .disable()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .userDetailsService(userDetailsServiceImpl)
+        .authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
+        .httpBasic();
+
+    return http.build();
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

@@ -20,7 +20,6 @@ ext {
     set('testcontainersVersion', "1.19.7")
 }
 
-// Используем совместимую версию Spring Cloud
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.4"
@@ -32,13 +31,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    // Обновляем версию Feign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
     implementation 'org.liquibase:liquibase-core'
-
-    // Обновляем MapStruct
     implementation 'org.mapstruct:mapstruct:1.6.2'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
 
@@ -49,7 +43,6 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // Testcontainers
     testImplementation platform("org.testcontainers:testcontainers-bom:${testcontainersVersion}")
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'
@@ -59,11 +52,11 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-//spotless {
-//    java {
-//        importOrder()
-//        removeUnusedImports()
-//        googleJavaFormat()
-//        endWithNewline()
-//    }
-//}
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat()
+        endWithNewline()
+    }
+}

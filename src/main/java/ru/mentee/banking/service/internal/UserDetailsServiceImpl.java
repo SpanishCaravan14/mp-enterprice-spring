@@ -12,16 +12,16 @@ import ru.mentee.banking.domain.model.User;
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws RuntimeException {
-        User user = userService.findByUsername(username);
+  @Override
+  public UserDetails loadUserByUsername(String username) throws RuntimeException {
+    User user = userService.findByUsername(username);
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(String.valueOf(user.getRole()))
-                .build();
-    }
+    return org.springframework.security.core.userdetails.User.builder()
+        .username(user.getUsername())
+        .password(user.getPassword())
+        .roles(String.valueOf(user.getRole()))
+        .build();
+  }
 }

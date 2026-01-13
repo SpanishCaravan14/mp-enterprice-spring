@@ -9,11 +9,13 @@ import ru.mentee.banking.domain.model.AuditEntry;
 @Mapper(componentModel = "spring")
 public interface BankingDtoMapper {
 
-    PaymentRequestDto toPaymentRequestDto(PaymentRequest paymentRequest);
-   TransferRequestDto toTransferRequestDto(TransferRequest transferRequest);
+  PaymentRequestDto toPaymentRequestDto(PaymentRequest paymentRequest);
 
-    @Mapping(source = "id", target = "accountId")
-    BalanceDto toResponseBalanceDto(Account account);
-    @Mapping(source = "userLogin", target = "userId")
-    AuditEntryDto toResponseAuditEntryDto(AuditEntry auditEntry);
+  TransferRequestDto toTransferRequestDto(TransferRequest transferRequest);
+
+  @Mapping(source = "id", target = "accountId")
+  BalanceDto toResponseBalanceDto(Account account);
+
+  @Mapping(source = "userLogin", target = "userId")
+  AuditEntryDto toResponseAuditEntryDto(AuditEntry auditEntry);
 }

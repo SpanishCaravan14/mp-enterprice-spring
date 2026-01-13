@@ -14,11 +14,11 @@ import ru.mentee.banking.service.internal.AccountService;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
-    private final AccountService accountService;
+  private final AccountService accountService;
 
-    @GetMapping("/api/accounts/{accountId}/balance")
-    public ResponseEntity<BalanceDto> getBalanceById(@PathVariable @NotNull String accountId) {
-        log.info("Trying getBalanceById {}", accountId);
-        return ResponseEntity.ok(accountService.getBalanceById(accountId));
-    }
+  @GetMapping("/api/accounts/{accountId}/balance")
+  public ResponseEntity<BalanceDto> getBalanceById(@PathVariable @NotNull String accountId) {
+    log.info("Trying getBalanceById {}", accountId);
+    return ResponseEntity.ok(accountService.getBalanceById(accountId));
+  }
 }

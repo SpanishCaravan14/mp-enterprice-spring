@@ -1,10 +1,9 @@
 package ru.mentee.banking.domain.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
 @Table(name = "money_transaction")
@@ -14,14 +13,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class MoneyTransaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private Long fromAccountId;
+  private Long fromAccountId;
 
-    private Long toAccountId;
+  private Long toAccountId;
 
-    private BigDecimal amount;
-    private LocalDateTime timeStamp;
+  private BigDecimal amount;
+  private LocalDateTime timeStamp;
 }

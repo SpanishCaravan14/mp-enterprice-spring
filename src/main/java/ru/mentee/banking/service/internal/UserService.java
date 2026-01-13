@@ -11,11 +11,14 @@ import ru.mentee.banking.domain.repository.UserRepository;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Transactional
-    public User findByUsername(String username) {
-        log.info("Finding user with username: " + username);
-        return userRepository.findByUsername(username).stream().peek(user -> log.info("Пользователь {} найден", username)).findAny().orElseThrow(()->new RuntimeException("User not found"));
-    }
+  @Transactional
+  public User findByUsername(String username) {
+    log.info("Finding user with username: " + username);
+    return userRepository.findByUsername(username).stream()
+        .peek(user -> log.info("Пользователь {} найден", username))
+        .findAny()
+        .orElseThrow(() -> new RuntimeException("User not found"));
+  }
 }

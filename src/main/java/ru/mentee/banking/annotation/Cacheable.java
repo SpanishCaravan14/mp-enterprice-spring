@@ -1,4 +1,3 @@
 package ru.mentee.banking.annotation;
 
-public @interface Cacheable {
-}
+public @interface Cacheable {}

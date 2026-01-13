@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiError> handleMethodArgumentNotValidException(
-            RuntimeException ex) {
-        ApiError apiError = new ApiError(ex.getMessage());
-        log.error(ex.getLocalizedMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ApiError> handleMethodArgumentNotValidException(RuntimeException ex) {
+    ApiError apiError = new ApiError(ex.getMessage());
+    log.error(ex.getLocalizedMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+  }
 }
-
