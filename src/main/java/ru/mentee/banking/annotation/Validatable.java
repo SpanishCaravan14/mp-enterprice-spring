@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Retryable {
+public @interface Validatable {
     String operation() default "";
-    int retryCount() default 3;
 }

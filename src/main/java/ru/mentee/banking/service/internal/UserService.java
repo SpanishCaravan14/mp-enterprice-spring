@@ -1,4 +1,4 @@
-package ru.mentee.banking.service;
+package ru.mentee.banking.service.internal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,6 @@ public class UserService {
     @Transactional
     public User findByUsername(String username) {
         log.info("Finding user with username: " + username);
-        return userRepository.findByUsername(username).orElseThrow(()->new RuntimeException("User not found"));
+        return userRepository.findByUsername(username).stream().peek(user -> log.info("Пользователь {} найден", username)).findAny().orElseThrow(()->new RuntimeException("User not found"));
     }
 }

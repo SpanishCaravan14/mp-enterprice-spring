@@ -11,8 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import ru.mentee.banking.annotation.Auditable;
 import ru.mentee.banking.domain.model.AuditEntry;
-import ru.mentee.banking.domain.repository.AuditRepository;
-import ru.mentee.banking.service.AuditService;
+import ru.mentee.banking.service.internal.AuditService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -22,7 +21,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Slf4j
 public class AuditAspect {
-    private final AuditRepository auditRepository;
+    private final AuditService auditService;
 
     @Before("@annotation(auditable)")
     public void logAuditable(JoinPoint joinPoint, Auditable auditable) {
@@ -33,27 +32,25 @@ public class AuditAspect {
     @Around("@annotation(auditable)")
     public Object audit(ProceedingJoinPoint joinPoint,
                         Auditable auditable) throws Throwable {
-
+        AuditEntry entry = new AuditEntry();
         String action = auditable.operation();
         String user = SecurityContextHolder.getContext()
                 .getAuthentication().getName();
         Object[] args = joinPoint.getArgs();
-
-        AuditEntry entry = new AuditEntry();
         entry.setOperation(action);
-    //    entry.setUserId(user);
+        entry.setUserLogin(user);
         entry.setTimestamp(LocalDateTime.now());
         entry.setDetails(Arrays.toString(args));
-
         try {
             Object result = joinPoint.proceed();
             entry.setStatus("SUCCESS");
             return result;
         } catch (Exception e) {
             entry.setStatus("FAILED");
+            entry.setDetails(entry.getDetails() + " " + e.getMessage());
             throw e;
-        } finally {
-            auditRepository.save(entry);
+        }finally {
+            auditService.saveAuditEntry(entry);
         }
     }
 }

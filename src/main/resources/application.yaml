@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: library
   datasource:
@@ -8,3 +10,11 @@ spring:
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:/db/migration/db.changelog.yaml
+  feign:
+    client:
+      config:
+        default:
+          connectTimeout: 10
+          readTimeout: 10
+external-service:
+  url: http://unavailable000999.ru

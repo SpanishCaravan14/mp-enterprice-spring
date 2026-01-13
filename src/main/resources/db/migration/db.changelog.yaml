@@ -136,3 +136,58 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 2026-01-12-2
+      author: sergey_lelekin
+      changes:
+        # Создание новой колонки
+        - addColumn:
+            tableName: audit_log
+            columns:
+              - column:
+                  name: user_login
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+        - dropColumn:
+            tableName: audit_log
+            columnName: user_id
+        - addForeignKeyConstraint:
+            baseTableName: audit_log
+            baseColumnNames: user_login
+            referencedTableName: users
+            referencedColumnNames: login
+            constraintName: fk_audit_log_user_login
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+  - changeSet:
+      id: 2026-01-12-3
+      author: sergey_lelekin
+      changes:
+        # Удаление старых внешних ключей
+        - dropForeignKeyConstraint:
+            baseTableName: money_transaction
+            constraintName: fk_from_account_id
+
+        - dropForeignKeyConstraint:
+            baseTableName: money_transaction
+            constraintName: fk_to_account_id
+
+        # Добавление новых внешних ключей на таблицу account
+        - addForeignKeyConstraint:
+            baseTableName: money_transaction
+            baseColumnNames: from_account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_from_account_id
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+
+        - addForeignKeyConstraint:
+            baseTableName: money_transaction
+            baseColumnNames: to_account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_to_account_id
+            onDelete: NO ACTION
+            onUpdate: NO ACTION

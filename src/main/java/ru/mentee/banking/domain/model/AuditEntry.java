@@ -16,8 +16,9 @@ public class AuditEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "user_id", nullable = false)
-    private Long userId = 228L;
+
+    @Column(name = "user_login")
+    private String userLogin;
 
     @Column(name = "operation", nullable = false, length = 100)
     private String operation;

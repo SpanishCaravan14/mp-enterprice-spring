@@ -9,20 +9,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.mentee.banking.service.CustomUserDetailsService;
+import ru.mentee.banking.service.internal.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .userDetailsService(customUserDetailsService)
+                .userDetailsService(userDetailsServiceImpl)
                 .authorizeHttpRequests(authz -> authz
                         .anyRequest().authenticated()
                 )

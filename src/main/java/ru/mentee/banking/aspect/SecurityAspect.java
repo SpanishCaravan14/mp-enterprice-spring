@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import ru.mentee.banking.annotation.AllowedRole;
+import ru.mentee.banking.annotation.RequiresRole;
 
 import java.util.Arrays;
 
@@ -19,21 +19,22 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityAspect {
 
-@Around("@annotation(allowedRole)")
-public Object checkRole(ProceedingJoinPoint joinPoint, AllowedRole allowedRole) throws Throwable {
+    @Around("@annotation(requiresRole)")
+    public Object checkRole(ProceedingJoinPoint joinPoint, RequiresRole requiresRole) throws Throwable {
 
-    if(Arrays.stream(allowedRole.value()).map(Enum::name).toList().contains(getCurrentUserRole())){
-        try {
-            Object result = joinPoint.proceed();
-            return result;
-        } catch (Exception e) {
-            throw e;
+        var currentUserRole = getCurrentUserRole();
+        if (Arrays.stream(requiresRole.value()).map(Enum::name).toList().contains(currentUserRole)) {
+            try {
+                Object result = joinPoint.proceed();
+                return result;
+            } catch (Exception e) {
+                throw e;
+            }
+        } else {
+            log.error("Среди допустимых ролей {} нет предоставленной {}", requiresRole.value(), currentUserRole);
+            throw new RuntimeException("You do not have permission to access this resource");
         }
-    }else{
-        log.error("Среди допустимых ролей {} нет предоставленной {}", allowedRole.value(), getCurrentUserRole());
-        throw new RuntimeException("You do not have permission to access this resource");
     }
-}
 
     private String getCurrentUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
