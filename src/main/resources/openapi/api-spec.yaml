@@ -253,6 +253,9 @@ components:
 
     UpdateTaskRequest:
       type: object
+      required:
+        - title
+        - priority
       properties:
         title:
           type: string
@@ -289,8 +292,6 @@ components:
         path:
           type: string
         value:
-          type: string
-        from:
           type: string
 
   parameters:

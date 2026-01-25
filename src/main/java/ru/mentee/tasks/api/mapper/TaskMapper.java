@@ -1,16 +1,16 @@
 package ru.mentee.tasks.api.mapper;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.domain.Page;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,17 +22,23 @@ import ru.mentee.tasks.domain.model.TaskEntity;
 import ru.mentee.tasks.domain.model.TaskPriority;
 import ru.mentee.tasks.domain.model.TaskStatus;
 import ru.mentee.tasks.domain.search.SearchInfo;
-import ru.mentee.tasks.domain.search.SearchTask;
 
 @Mapper(componentModel = "spring")
 @Component
 public interface TaskMapper {
 
   @Mapping(target = "tagsArray", source = "tags")
-  TaskEntity toModel(CreateTaskRequest source);
+  TaskEntity toEntity(CreateTaskRequest source);
 
+  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   @Mapping(target = "tagsArray", source = "tags")
-  TaskEntity toModel(UpdateTaskRequest source);
+  TaskEntity toEntity(UpdateTaskRequest source);
+
+  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  @Mapping(target = "updatedAt", ignore = true)
+  TaskEntity toPartialEntity(TaskEntity partial, @MappingTarget TaskEntity entity);
 
   @Mapping(target = "tags", source = "tagsArray")
   Task toDto(TaskEntity entity);
@@ -52,28 +58,12 @@ public interface TaskMapper {
     return value != null ? value.toInstant() : null;
   }
 
-  default String[] mapTagsListToArray(List<String> tags) {
+  default String[] map(List<String> tags) {
     return tags.toArray(new String[0]);
   }
 
-  default List<String> mapTagsArrayToList(String[] tagsArray) {
+  default List<String> map(String[] tagsArray) {
     return Arrays.asList(tagsArray);
-  }
-
-  default LocalDateTime mapOffsetLocal(OffsetDateTime offsetDateTime) {
-    return offsetDateTime != null ? offsetDateTime.toLocalDateTime() : null;
-  }
-
-  default OffsetDateTime mapLocalOffset(LocalDateTime localDateTime) {
-    return localDateTime != null ? localDateTime.atOffset(ZoneOffset.UTC) : null;
-  }
-
-  default TaskStatus mapSourceStatus(Task.StatusEnum status) {
-    return status != null ? TaskStatus.valueOf(status.name()) : null;
-  }
-
-  default TaskPriority mapSourcePriority(Task.PriorityEnum priority) {
-    return priority != null ? TaskPriority.valueOf(priority.name()) : null;
   }
 
   default Task.StatusEnum mapModelStatus(TaskStatus status) {
@@ -86,10 +76,6 @@ public interface TaskMapper {
 
   default SearchInfo.Filter toFilter(String status, String assignee, String priority) {
     return SearchInfo.Filter.builder().status(status).priority(priority).assignee(assignee).build();
-  }
-
-  default SearchTask toSearchTask(Page<TaskEntity> taskEntityPage) {
-    return new SearchTask(taskEntityPage.getTotalElements(), toTasks(taskEntityPage.getContent()));
   }
 
   default Pageable toPageable(String sort, Integer page, Integer size) {

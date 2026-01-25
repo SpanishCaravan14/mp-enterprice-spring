@@ -12,21 +12,21 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 @Configuration
 public class JacksonConfig {
-    @Bean
-    public HttpMessageConverters httpMessageConverters(ObjectMapper objectMapper) {
-        MappingJackson2HttpMessageConverter jsonConverter =
-                new MappingJackson2HttpMessageConverter(objectMapper);
-        return new HttpMessageConverters(jsonConverter);
-    }
+  @Bean
+  public HttpMessageConverters httpMessageConverters(ObjectMapper objectMapper) {
+    MappingJackson2HttpMessageConverter jsonConverter =
+        new MappingJackson2HttpMessageConverter(objectMapper);
+    return new HttpMessageConverters(jsonConverter);
+  }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        mapper.registerModule(module);
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper;
-    }
+  @Bean
+  public ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    SimpleModule module = new SimpleModule();
+    mapper.registerModule(module);
+    mapper.registerModule(new JavaTimeModule());
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    return mapper;
+  }
 }

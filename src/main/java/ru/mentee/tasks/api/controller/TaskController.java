@@ -30,8 +30,7 @@ public class TaskController implements TasksApi {
 
   @Override
   public ResponseEntity<Task> createTask(CreateTaskRequest dto) {
-    log.info("Creating task: {}", dto.getTitle());
-    var model = mapper.toModel(dto);
+    var model = mapper.toEntity(dto);
     var created = taskService.createTask(model);
     URI location =
         ServletUriComponentsBuilder.fromCurrentRequest()
@@ -43,19 +42,19 @@ public class TaskController implements TasksApi {
 
   @Override
   public ResponseEntity<Task> getTaskById(UUID taskId) {
-    return ResponseEntity.ok(taskService.getTaskById(taskId));
+    return ResponseEntity.ok(taskService.searchTaskById(taskId));
   }
 
   @Override
   public ResponseEntity<TaskListResponse> getTasks(
       String status, String assignee, String priority, String sort, Integer page, Integer size) {
     SearchInfo searchInfo = mapper.toSearchInfo(status, assignee, priority, sort, page, size);
-    return ResponseEntity.ok(taskService.getAllTasks(searchInfo));
+    return ResponseEntity.ok(taskService.searchTasks(searchInfo));
   }
 
   @Override
   public ResponseEntity<Task> updateTask(UUID taskId, UpdateTaskRequest updateTaskRequest) {
-    var model = mapper.toModel(updateTaskRequest);
+    var model = mapper.toEntity(updateTaskRequest);
     return ResponseEntity.ok(taskService.updateTask(taskId, model));
   }
 

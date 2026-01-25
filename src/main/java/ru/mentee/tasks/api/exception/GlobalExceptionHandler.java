@@ -22,8 +22,15 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(TaskNotFoundException.class)
   public ResponseEntity<ApiError> handleTaskNotFoundException(TaskNotFoundException ex) {
     ApiError apiError = new ApiError(ex.getMessage());
     return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(IllegalPatchOperationException.class)
+  public ResponseEntity<ApiError> handleIllegalPatchOperationException(IllegalPatchOperationException ex) {
+    ApiError apiError = new ApiError(ex.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
   }
 }
