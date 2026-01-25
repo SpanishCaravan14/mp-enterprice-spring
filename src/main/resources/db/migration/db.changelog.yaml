@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tasks-table
+      author: sergey_lelekin
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: VARCHAR(2000)
+
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+                    checkConstraint: "status IN ('TODO', 'IN_PROGRESS', 'DONE')"
+
+              - column:
+                  name: priority
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+                    checkExpression: "priority IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')"
+
+              - column:
+                  name: assignee
+                  type: VARCHAR(255)
+
+              - column:
+                  name: due_date
+                  type: TIMESTAMP
+
+              - column:
+                  name: tags
+                  type: TEXT[]
+                  remarks: "Массив тегов PostgreSQL"
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
