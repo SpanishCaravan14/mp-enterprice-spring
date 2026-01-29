@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.liquibase:liquibase-core'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
     implementation 'io.swagger.core.v3:swagger-annotations:2.2.15'
@@ -64,8 +65,8 @@ openApiGenerate {
     generatorName = "spring"
     inputSpec = "${project.rootDir}/src/main/resources/openapi/api-spec.yaml"
     outputDir = "$buildDir/generated"
-    apiPackage = "ru.mentee.api.generated.controller"
-    modelPackage = "ru.mentee.api.generated.dto"
+    apiPackage = "ru.mentee.api.controller"
+    modelPackage = "ru.mentee.app.api.generated.dto"
     configOptions = [
             dateLibrary: "java8",
             interfaceOnly: "true",
