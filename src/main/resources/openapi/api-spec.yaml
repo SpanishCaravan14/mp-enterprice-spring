@@ -3,10 +3,17 @@ info:
   title: Online Learning Platform API
   version: 1.0.0
 
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
 paths:
-  /api/v1/courses:
+  /courses:
     get:
       summary: Получить список курсов
+      operationId: getCourses
+      tags:
+        - Courses
       parameters:
         - name: Accept
           in: header
@@ -36,9 +43,12 @@ paths:
               schema:
                 type: string
 
-  /api/v1/courses/{courseId}/enroll:
+  /courses/{courseId}/enroll:
     post:
       summary: Записаться на курс (async)
+      operationId: enrollCourse
+      tags:
+        - Courses
       parameters:
         - name: courseId
           in: path
@@ -58,9 +68,12 @@ paths:
               schema:
                 type: string
                 description: URL для проверки статуса
-  /api/v1/courses/{courseId}/enroll/status:
+  /courses/{courseId}/enroll/status:
     get:
       summary: Получить статус записи на курс
+      operationId: getStatus
+      tags:
+        - Courses
       parameters:
         - name: courseId
           in: path
@@ -80,9 +93,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/EnrollStatus'
 
-  /api/v1/courses/{courseId}/lessons/{lessonId}/video:
+  /courses/{courseId}/lessons/{lessonId}/video:
     post:
       summary: Загрузить видео урока
+      operationId: uploadLesson
+      tags:
+        - Lessons
       parameters:
         - name: courseId
           in: path
@@ -111,9 +127,12 @@ paths:
         '201':
           description: Видео загружено
 
-  /api/v1/notifications/stream:
+  /notifications/stream:
     get:
       summary: Подписаться на уведомления (SSE)
+      operationId: subscribeForNotifications
+      tags:
+        - Notifications
       responses:
         '200':
           description: Event stream
@@ -122,9 +141,12 @@ paths:
               schema:
                 type: string
 
-  /api/v1/users/me/progress:
+  /users/me/progress:
     get:
       summary: Прогресс текущего пользователя
+      operationId: getUserProgress
+      tags:
+        - Users
       responses:
         '200':
           description: Информация о прогрессе
