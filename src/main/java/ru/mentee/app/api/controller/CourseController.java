@@ -1,10 +1,13 @@
 package ru.mentee.app.api.controller;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mentee.app.api.generated.controller.DefaultApi;
 import ru.mentee.app.api.generated.dto.CourseList;
@@ -17,6 +20,7 @@ import ru.mentee.app.service.CourseService;
 public class CourseController implements DefaultApi {
     private final CourseService courseService;
     private final CourseMapper courseMapper;
+
     @Override
     @GetMapping(produces = {
             MediaType.APPLICATION_JSON_VALUE,
@@ -28,4 +32,8 @@ public class CourseController implements DefaultApi {
         return ResponseEntity.ok(courseList);
     }
 
+    @Override
+   public ResponseEntity<Void> apiV1CoursesCourseIdEnrollPost(String courseId){
+        return null;
+    }
 }

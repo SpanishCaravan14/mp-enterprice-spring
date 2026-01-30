@@ -45,6 +45,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         '202':
           description: Запрос принят в обработку
@@ -53,6 +58,27 @@ paths:
               schema:
                 type: string
                 description: URL для проверки статуса
+  /api/v1/courses/{courseId}/enroll/status:
+    get:
+      summary: Получить статус записи на курс
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Получен статус записи на курс
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollStatus'
 
   /api/v1/courses/{courseId}/lessons/{lessonId}/video:
     post:
@@ -142,4 +168,9 @@ components:
         id:
           type: string
         name:
+          type: string
+    EnrollStatus:
+      type: object
+      properties:
+        status:
           type: string

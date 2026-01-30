@@ -4,13 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 import ru.mentee.app.BasePostgresIT;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Sql(statements = """
         INSERT INTO INSTRUCTOR (id, name)
@@ -21,6 +26,11 @@ import java.util.stream.Collectors;
             VALUES ('11111111-1111-1111-2222-111111111111', 'Java с нуля', 'Стань разработчиком за неделю!', 'coding', 'BEGINNER', 40,100000.00, '11111111-1111-1111-1111-111111111111'),
              ('11111111-1111-1111-2222-111111111112', 'Java middle', 'Повысь грейд!', 'coding', 'INTERMEDIATE', 20,155000.00, '11111111-1111-1111-1111-111111111111'),
              ('11111111-1111-1111-2222-111111111113', 'Системный дизайн и архитектура', 'Повысь грейд!', 'system design', 'ADVANCED', 200,155000.00, '11111111-1111-1111-1111-111111111112');
+        INSERT INTO USERS (id, name)
+            VALUES 
+                ('11111111-1111-1111-1111-111111111113', 'Daniil');
+                INSERT INTO USER_COURSE_MAPPING (user_id, course_id, status)
+                VALUES ('11111111-1111-1111-1111-111111111113','11111111-1111-1111-2222-111111111112', 'ACTIVE');
         commit;
         """)
 public class CourseControllerIT extends BasePostgresIT {
@@ -31,19 +41,41 @@ public class CourseControllerIT extends BasePostgresIT {
         headers.add("Accept", "application/xml");
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
-
         var category = "coding";
         var level = "BEGINNER";
-        var x = restTemplate.getForEntity(url, String.class, category, level).getBody();
-        var y = restTemplate.getForEntity("/api/v1/courses", String.class).getBody();
-        var z = restTemplate.exchange(url,
+        var responseJson = restTemplate.getForEntity(url, String.class, category, level);
+        var responseXml = restTemplate.getForEntity("/api/v1/courses", String.class);
+        var responseCsv = restTemplate.exchange(url,
                 HttpMethod.GET,
                 requestEntity,
                 String.class,
                 category,
                 level
                 );
-
+        assertThat(responseJson)
+                .satisfies(
+                        r ->
+                        {
+                            assertEquals(HttpStatus.OK, r.getStatusCode());
+                            assertThat(r.getBody()).isNotEmpty();
+                        }
+                );
+        assertThat(responseXml)
+                .satisfies(
+                        r ->
+                        {
+                            assertEquals(HttpStatus.OK, r.getStatusCode());
+                            assertThat(r.getBody()).isNotEmpty();
+                        }
+                );
+        assertThat(responseCsv)
+                .satisfies(
+                        r ->
+                        {
+                            assertEquals(HttpStatus.OK, r.getStatusCode());
+                            assertThat(r.getBody()).isNotEmpty();
+                        }
+                );
     }
 
     @Test
@@ -56,8 +88,7 @@ public class CourseControllerIT extends BasePostgresIT {
         Map<Integer, String> map = list.stream().collect(Collectors.toMap(list::indexOf, i -> i));
         System.out.println(map);
     }
-    void whenGetPresentCoursesCsvAcceptThenOk(){
 
 
-    }
+
 }

@@ -38,6 +38,10 @@ public class CourseCsvHttpMessageConverter extends AbstractHttpMessageConverter 
             throws IOException, HttpMessageNotWritableException {
 
         outputMessage.getHeaders().add(
+                "X-Total-Count",
+                           String.valueOf(courseList.getCourses().size())
+        );
+        outputMessage.getHeaders().add(
                 "Content-Disposition",
                 "attachment; filename=\"courses.csv\""
         );

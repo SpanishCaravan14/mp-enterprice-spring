@@ -5,3 +5,9 @@ databaseChangeLog:
   - include:
       file: v2_create_table_course.sql
       relativeToChangelogFile: true
+  - include:
+      file: v3_create_table_users.sql
+      relativeToChangelogFile: true
+  - include:
+      file: v4_create_table_user_course_mapping.sql
+      relativeToChangelogFile: true
