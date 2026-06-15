@@ -1,13 +1,11 @@
 package ru.mentee.library.service.impl;
 
-import static ru.mentee.library.api.mapper.BookMapper.toBookReadModel;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +19,12 @@ import ru.mentee.library.service.BookService;
 @Service
 @Qualifier("science")
 @Transactional
+@RequiredArgsConstructor
 @Slf4j
 public class ScienceBookServiceImpl implements BookService {
 
-  @Autowired private BookRepository bookRepository;
+  private final BookRepository bookRepository;
+  private final BookMapper bookMapper;
 
   @Override
   public Book createBook(Book book) {
@@ -35,9 +35,7 @@ public class ScienceBookServiceImpl implements BookService {
   @Override
   public List<BookDto> getAllBooks() {
     log.info("Get science books");
-    return bookRepository.findAll().stream()
-        .map(BookMapper::toBookReadModel)
-        .collect(Collectors.toList());
+    return bookRepository.findAll().stream().map(bookMapper::toDto).collect(Collectors.toList());
   }
 
   @Override
@@ -51,7 +49,7 @@ public class ScienceBookServiceImpl implements BookService {
                   log.error("Book with id {} not found", id);
                   return new NotFoundBookException();
                 });
-    return toBookReadModel(book);
+    return bookMapper.toDto(book);
   }
 
   @PostConstruct

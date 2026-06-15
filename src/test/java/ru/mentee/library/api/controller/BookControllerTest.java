@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,7 +27,11 @@ public class BookControllerTest {
 
   @Mock BookService bookService;
 
+  @Mock BookMapper mockedMapper;
+
   @InjectMocks BookController bookController;
+
+  BookMapper mapper = Mappers.getMapper(BookMapper.class);
 
   @Test
   @DisplayName("Успешное создание книги")
@@ -51,6 +56,7 @@ public class BookControllerTest {
             .build();
 
     when(bookService.createBook(any(Book.class))).thenReturn(expectedBook);
+    when(mockedMapper.toModel(any())).thenReturn(expectedBook);
 
     ResponseEntity<Void> actual = bookController.createBook(req);
     assertThat(actual)
@@ -82,7 +88,7 @@ public class BookControllerTest {
             .build();
 
     List<BookDto> expectedBooks =
-        (Stream.of(expectedBook, expectedBook1).map(BookMapper::toBookReadModel).toList());
+        (Stream.of(expectedBook, expectedBook1).map(mapper::toDto).toList());
 
     when(bookService.getAllBooks()).thenReturn(expectedBooks);
 

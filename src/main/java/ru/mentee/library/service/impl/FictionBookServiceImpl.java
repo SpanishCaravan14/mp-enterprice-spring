@@ -1,14 +1,13 @@
 package ru.mentee.library.service.impl;
 
-import static ru.mentee.library.api.mapper.BookMapper.toBookReadModel;
 import static ru.mentee.library.service.validation.IsbnValidator.validateIsbn;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -21,19 +20,16 @@ import ru.mentee.library.domain.model.Book;
 import ru.mentee.library.domain.repository.BookRepository;
 import ru.mentee.library.service.BookService;
 
-@Slf4j
 @Service
 @Primary
 @Qualifier("fiction")
+@Slf4j
+@RequiredArgsConstructor
 @Transactional
 public class FictionBookServiceImpl implements BookService {
 
-  private BookRepository bookRepository;
-
-  @Autowired
-  public void setBookRepository(BookRepository bookRepository) {
-    this.bookRepository = bookRepository;
-  }
+  private final BookRepository bookRepository;
+  private final BookMapper bookMapper;
 
   @Override
   public Book createBook(Book book) {
@@ -49,9 +45,7 @@ public class FictionBookServiceImpl implements BookService {
   @Override
   public List<BookDto> getAllBooks() {
     log.info("Trying to get all fiction books");
-    return bookRepository.findAll().stream()
-        .map(BookMapper::toBookReadModel)
-        .collect(Collectors.toList());
+    return bookRepository.findAll().stream().map(bookMapper::toDto).collect(Collectors.toList());
   }
 
   @Override
@@ -65,7 +59,7 @@ public class FictionBookServiceImpl implements BookService {
                   log.error("Book with id {} not found", id);
                   return new NotFoundBookException();
                 });
-    return toBookReadModel(book);
+    return bookMapper.toDto(book);
   }
 
   @PostConstruct

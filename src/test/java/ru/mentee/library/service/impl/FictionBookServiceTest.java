@@ -2,8 +2,11 @@ package ru.mentee.library.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
-import static ru.mentee.library.api.mapper.BookMapper.toBookReadModel;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,10 +14,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.mentee.library.api.dto.BookDto;
+import ru.mentee.library.api.mapper.BookMapper;
 import ru.mentee.library.domain.exception.InvalidIsbnException;
 import ru.mentee.library.domain.model.Book;
 import ru.mentee.library.domain.repository.BookRepository;
@@ -23,6 +29,8 @@ import ru.mentee.library.domain.repository.BookRepository;
 public class FictionBookServiceTest {
 
   @Mock private BookRepository bookRepository;
+
+  @Spy private BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
 
   @InjectMocks FictionBookServiceImpl fictionBookService;
 
@@ -152,7 +160,7 @@ public class FictionBookServiceTest {
 
     when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
-    BookDto expectedBook = toBookReadModel(book);
+    BookDto expectedBook = bookMapper.toDto(book);
     BookDto actualBook = fictionBookService.getBookById(1L);
 
     assertThat(actualBook).isEqualTo(expectedBook);
