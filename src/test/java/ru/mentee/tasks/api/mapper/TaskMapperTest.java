@@ -1,15 +1,16 @@
 package ru.mentee.tasks.api.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import java.time.temporal.ChronoUnit;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import ru.mentee.tasks.api.generated.dto.CreateTaskRequest;
+import ru.mentee.api.generated.dto.CreateTaskRequest;
 import ru.mentee.tasks.domain.model.TaskPriority;
+
+import java.time.temporal.ChronoUnit;
+
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskMapperTest {
   TaskMapper taskMapper = Mappers.getMapper(TaskMapper.class);

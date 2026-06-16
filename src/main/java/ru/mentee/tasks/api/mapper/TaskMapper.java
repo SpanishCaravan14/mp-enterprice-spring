@@ -1,11 +1,5 @@
 package ru.mentee.tasks.api.mapper;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,13 +9,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import ru.mentee.tasks.api.generated.dto.CreateTaskRequest;
-import ru.mentee.tasks.api.generated.dto.Task;
-import ru.mentee.tasks.api.generated.dto.UpdateTaskRequest;
+import ru.mentee.api.generated.dto.CreateTaskRequest;
+import ru.mentee.api.generated.dto.Task;
+import ru.mentee.api.generated.dto.UpdateTaskRequest;
 import ru.mentee.tasks.domain.model.TaskEntity;
 import ru.mentee.tasks.domain.model.TaskPriority;
 import ru.mentee.tasks.domain.model.TaskStatus;
 import ru.mentee.tasks.domain.search.SearchInfo;
+
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 @Component
@@ -75,7 +76,12 @@ public interface TaskMapper {
   }
 
   default SearchInfo.Filter toFilter(String status, String assignee, String priority) {
-    return SearchInfo.Filter.builder().status(status).priority(priority).assignee(assignee).build();
+    var filterBuilder = SearchInfo.Filter.builder();
+    if(status != null) filterBuilder.status(status);
+    if(priority != null) filterBuilder.priority(priority);
+    if(assignee != null) filterBuilder.assignee(assignee);
+
+    return filterBuilder.build();
   }
 
   default Pageable toPageable(String sort, Integer page, Integer size) {

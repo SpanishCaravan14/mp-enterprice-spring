@@ -1,14 +1,10 @@
 package ru.mentee.tasks.api.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,28 +15,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlMergeMode;
+import org.springframework.test.web.servlet.MockMvc;
+import ru.mentee.api.generated.dto.CreateTaskRequest;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
+import ru.mentee.api.generated.dto.Task;
+import ru.mentee.api.generated.dto.UpdateTaskRequest;
 import ru.mentee.tasks.BaseIntegrationTest;
-import ru.mentee.tasks.api.generated.dto.CreateTaskRequest;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
-import ru.mentee.tasks.api.generated.dto.Task;
-import ru.mentee.tasks.api.generated.dto.UpdateTaskRequest;
 import ru.mentee.tasks.domain.model.TaskEntity;
+
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Sql(
     statements =
         """
                 INSERT INTO tasks (id, title, description, status, priority, assignee, due_date, tags, created_at, updated_at)
                 VALUES
-                    ('00000000-0000-0000-0000-000000000001', 'Test task', 'Test description', 'TODO', 'HIGH', 'user1', '2029-01-01 00:00:00', '{tag1, tag2}', '2026-01-01 00:00:00', '2026-01-01 00:00:00'),
+                    ('00000000-0000-0000-0000-000000000001', 'Test task', 'Test description', 'DONE', 'HIGH', 'user1', '2029-01-01 00:00:00', '{tag1, tag2}', '2026-01-01 00:00:00', '2026-01-01 00:00:00'),
                     ('00000000-0000-0000-0000-000000000002', 'Test task2', 'Test description', 'IN_PROGRESS', 'LOW', 'user1', '2029-01-01 00:00:00', '{tag1, tag2, tag3}', '2026-01-01 00:00:01', '2026-01-02 00:00:00'),
                     ('00000000-0000-0000-0000-000000000003', 'Test task3', 'Test description', 'TODO', 'HIGH', 'user1', '2029-01-01 00:00:00', '{tag1, tag2}', '2026-01-01 00:00:02', '2026-01-01 00:00:00');
                 """)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@AutoConfigureMockMvc
 public class TaskControllerIntegrationTest extends BaseIntegrationTest {
   @Autowired private TestRestTemplate restTemplate;
+  @Autowired private MockMvc mockMvc;
 
   @Test
-  void shouldSuccessCreateProduct() {
+  void shouldSuccessCreateTask() {
     CreateTaskRequest createTaskRequest = Instancio.of(CreateTaskRequest.class).create();
     var response = restTemplate.postForEntity("/api/v1/tasks", createTaskRequest, Task.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -69,6 +77,22 @@ public class TaskControllerIntegrationTest extends BaseIntegrationTest {
     TaskEntity taskEntity = taskOptional.get();
     assertThat(taskEntity).isNotNull();
   }
+
+    @Test
+    @DisplayName("Should поддерживать фильтрацию и пагинацию")
+    void shouldSupportFilteringAndPagination() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/tasks")
+                        .param("status", "TODO")
+                        .param("priority", "HIGH")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("sort", "priority:desc,createdAt:asc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.tasks").isArray())
+                .andExpect(jsonPath("$.tasks").isNotEmpty())
+                .andExpect(jsonPath("$.pagination.page").value(0))
+                .andExpect(jsonPath("$.pagination.size").value(10));
+    }
 
   @Test
   @SqlMergeMode(SqlMergeMode.MergeMode.MERGE)

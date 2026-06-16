@@ -1,23 +1,25 @@
 package ru.mentee.tasks.service;
 
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
+import ru.mentee.api.generated.dto.Task;
+import ru.mentee.api.generated.dto.TaskListResponse;
+import ru.mentee.api.generated.dto.TaskListResponsePagination;
 import ru.mentee.tasks.api.exception.TaskNotFoundException;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
-import ru.mentee.tasks.api.generated.dto.Task;
-import ru.mentee.tasks.api.generated.dto.TaskListResponse;
 import ru.mentee.tasks.api.mapper.TaskMapper;
 import ru.mentee.tasks.domain.model.TaskEntity;
 import ru.mentee.tasks.domain.model.TaskStatus;
 import ru.mentee.tasks.domain.repository.TaskRepository;
 import ru.mentee.tasks.domain.search.SearchInfo;
 import ru.mentee.tasks.domain.specification.TaskSpecification;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -49,6 +51,9 @@ public class TaskService {
     TaskListResponse response = new TaskListResponse();
     response.setTotalElements(result.getTotalElements());
     response.setTasks(result.getContent().stream().map(taskMapper::toDto).toList());
+    response.setPagination(new TaskListResponsePagination()
+            .page(result.getPageable().getPageNumber())
+            .size(result.getPageable().getPageSize()));
     return response;
   }
 

@@ -1,12 +1,13 @@
 package ru.mentee.tasks.service.patcher;
 
-import java.time.Instant;
 import org.springframework.stereotype.Service;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
 import ru.mentee.tasks.api.exception.IllegalPatchOperationException;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
 import ru.mentee.tasks.domain.model.TaskEntity;
 import ru.mentee.tasks.domain.model.TaskPriority;
 import ru.mentee.tasks.domain.model.TaskStatus;
+
+import java.time.Instant;
 
 @Service
 public class ReplaceOperationPatcher implements TaskPatcher {

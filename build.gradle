@@ -51,12 +51,15 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-spotless {
-    java {
-        importOrder()
-        removeUnusedImports()
-        googleJavaFormat()
-        endWithNewline()
+tasks.named('compileJava') {
+    dependsOn('openApiGenerate')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/generated/src/main/java"
+        }
     }
 }
 
@@ -75,4 +78,13 @@ openApiGenerate {
             useSpringBoot3: "true",
             delegatePattern: "true"
     ]
+}
+
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat()
+        endWithNewline()
+    }
 }

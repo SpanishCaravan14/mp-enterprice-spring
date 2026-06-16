@@ -1,11 +1,12 @@
 package ru.mentee.tasks.service.patcher;
 
+import org.springframework.stereotype.Service;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
+import ru.mentee.tasks.api.exception.IllegalPatchOperationException;
+import ru.mentee.tasks.domain.model.TaskEntity;
+
 import java.util.Arrays;
 import java.util.stream.Stream;
-import org.springframework.stereotype.Service;
-import ru.mentee.tasks.api.exception.IllegalPatchOperationException;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
-import ru.mentee.tasks.domain.model.TaskEntity;
 
 @Service
 public class AddOperationPatcher implements TaskPatcher {

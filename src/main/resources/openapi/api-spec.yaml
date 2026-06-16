@@ -249,7 +249,14 @@ components:
           items:
             $ref: '#/components/schemas/Task'
         totalElements:
-          type: long
+          type: integer
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+            size:
+              type: integer
 
     UpdateTaskRequest:
       type: object

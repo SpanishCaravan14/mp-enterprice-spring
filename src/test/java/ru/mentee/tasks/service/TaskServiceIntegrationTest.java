@@ -1,30 +1,31 @@
 package ru.mentee.tasks.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static ru.mentee.tasks.DataHelper.getTaskEntity;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
+import ru.mentee.tasks.BaseIntegrationTest;
+import ru.mentee.tasks.api.exception.IllegalPatchOperationException;
+import ru.mentee.tasks.api.exception.TaskNotFoundException;
+import ru.mentee.tasks.domain.model.TaskEntity;
+import ru.mentee.tasks.domain.model.TaskPriority;
+import ru.mentee.tasks.domain.model.TaskStatus;
+import ru.mentee.tasks.domain.search.SearchInfo;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
-import ru.mentee.tasks.BaseIntegrationTest;
-import ru.mentee.tasks.api.exception.IllegalPatchOperationException;
-import ru.mentee.tasks.api.exception.TaskNotFoundException;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
-import ru.mentee.tasks.domain.model.TaskEntity;
-import ru.mentee.tasks.domain.model.TaskPriority;
-import ru.mentee.tasks.domain.model.TaskStatus;
-import ru.mentee.tasks.domain.search.SearchInfo;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static ru.mentee.tasks.DataHelper.getTaskEntity;
 
 @Sql(
     statements =

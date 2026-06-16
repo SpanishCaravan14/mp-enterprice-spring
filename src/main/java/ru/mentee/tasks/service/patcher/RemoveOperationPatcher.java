@@ -1,10 +1,11 @@
 package ru.mentee.tasks.service.patcher;
 
-import java.util.Arrays;
 import org.springframework.stereotype.Service;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
 import ru.mentee.tasks.api.exception.IllegalPatchOperationException;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
 import ru.mentee.tasks.domain.model.TaskEntity;
+
+import java.util.Arrays;
 
 @Service
 public class RemoveOperationPatcher implements TaskPatcher {

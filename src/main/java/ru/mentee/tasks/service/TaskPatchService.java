@@ -1,11 +1,12 @@
 package ru.mentee.tasks.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
 import ru.mentee.tasks.domain.model.TaskEntity;
 import ru.mentee.tasks.service.patcher.TaskPatcher;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

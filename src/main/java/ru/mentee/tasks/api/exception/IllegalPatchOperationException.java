@@ -1,8 +1,9 @@
 package ru.mentee.tasks.api.exception;
 
+import ru.mentee.api.generated.dto.JsonPatchOperation;
+
 import static java.lang.String.format;
 
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
 
 public class IllegalPatchOperationException extends RuntimeException {
   public IllegalPatchOperationException(JsonPatchOperation.OpEnum operationType, String parameter) {

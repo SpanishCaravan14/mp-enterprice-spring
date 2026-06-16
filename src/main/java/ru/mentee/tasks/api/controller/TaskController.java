@@ -1,24 +1,24 @@
 package ru.mentee.tasks.api.controller;
 
 import jakarta.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.mentee.tasks.api.generated.controller.TasksApi;
-import ru.mentee.tasks.api.generated.dto.CreateTaskRequest;
-import ru.mentee.tasks.api.generated.dto.JsonPatchOperation;
-import ru.mentee.tasks.api.generated.dto.Task;
-import ru.mentee.tasks.api.generated.dto.TaskListResponse;
-import ru.mentee.tasks.api.generated.dto.UpdateTaskRequest;
+import ru.mentee.api.generated.controller.TasksApi;
+import ru.mentee.api.generated.dto.CreateTaskRequest;
+import ru.mentee.api.generated.dto.JsonPatchOperation;
+import ru.mentee.api.generated.dto.Task;
+import ru.mentee.api.generated.dto.TaskListResponse;
+import ru.mentee.api.generated.dto.UpdateTaskRequest;
 import ru.mentee.tasks.api.mapper.TaskMapper;
 import ru.mentee.tasks.domain.search.SearchInfo;
 import ru.mentee.tasks.service.TaskService;
+
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,11 +32,7 @@ public class TaskController implements TasksApi {
   public ResponseEntity<Task> createTask(CreateTaskRequest dto) {
     var model = mapper.toEntity(dto);
     var created = taskService.createTask(model);
-    URI location =
-        ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(created.getId())
-            .toUri();
+    URI location = URI.create("/api/v1/tasks/" + created.getId());
     return ResponseEntity.created(location).body(created);
   }
 
